@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Providers;
+
+use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Database\Eloquent\Relations\Relation;
+use App\Models\Teacher;
+use App\Models\Student;
+use App\Models\Admin;
+use App\Models\Course;
+use App\Observers\CourseObserver;
+
+class AppServiceProvider extends ServiceProvider
+{
+    /**
+     * Register any application services.
+     */
+    public function register(): void
+    {
+        //
+    }
+
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot(): void
+    {
+        ResetPassword::createUrlUsing(function (object $notifiable, string $token) {
+            return config('app.frontend_url')."/password-reset/$token?email={$notifiable->getEmailForPasswordReset()}";
+        });
+
+        Course::observe(CourseObserver::class);
+
+        Relation::morphMap([
+        'teacher' => Teacher::class,
+        'student' => Student::class,
+        'admin'   => Admin::class,
+       ]);
+    }
+}
