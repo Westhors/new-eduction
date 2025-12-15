@@ -14,10 +14,15 @@ class Stage extends BaseModel
     protected $casts = [
         'active' => 'boolean'
     ];
-    
+
     public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class);
+    }
+
+    public function curriculum()
+    {
+        return $this->belongsTo(Curriculum::class);
     }
 
 }
