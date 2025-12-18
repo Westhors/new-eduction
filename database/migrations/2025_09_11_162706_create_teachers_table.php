@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('id_card_front')->nullable();
             $table->string('id_card_back')->nullable();
 
-            $table->foreignId('country_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('country_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('stage_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('subject_id')->nullable()->constrained()->nullOnDelete();
             $table->boolean('active')->default(0);
