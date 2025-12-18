@@ -33,11 +33,11 @@ class TeacherRequest extends FormRequest
             'experience_image' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
             'id_card_front' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
             'id_card_back' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-            'country_id' => 'required|exists:countries,id',
-            'stage_id' => 'required|array',
+            'country_id' => 'nullable|exists:countries,id',
+            'stage_id' => 'nullable|array',
             'stage_id.*' => 'exists:stages,id',
 
-            'subject_id' => 'required|array',
+            'subject_id' => 'nullable|array',
             'subject_id.*' => 'exists:subjects,id',
         ];
     }
