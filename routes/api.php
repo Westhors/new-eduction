@@ -10,7 +10,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CourseDetailController;
 use App\Http\Controllers\CurriculumController;
 use App\Http\Controllers\ExamController;
-
+use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\LibraryController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\StageController;
@@ -37,9 +37,6 @@ Route::middleware('auth:admins')->group(function () {
     Route::post('/admin/logout', [AdminController::class, 'logout']);
 });
 Route::get('admin/dashboard-stats', [AdminController::class, 'index']);
-
-
-
 
 
 
@@ -99,6 +96,17 @@ Route::delete('/courses/{course_id}/remove-student/{student_id}', [CourseControl
 //////////////////////////////////////////////////////////Course Details//////////////////////////////////////
 
 
+
+//////////////////////////////////////////////////////////Message//////////////////////////////////////
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('chat/send', [MessageController::class, 'sendMessage']);
+    Route::get('chat/messages', [MessageController::class, 'getMessages']);
+    Route::post('courses/{course}/comments', [CourseCommentController::class, 'store']);
+    Route::post('teachers/{teacher}/comments', [TeacherCommentController::class, 'store']);
+    Route::post('student/{student}/comment', [StudentCommentController::class, 'store']);
+});
+
+//////////////////////////////////////////////////////////Message//////////////////////////////////////
 
 
 
