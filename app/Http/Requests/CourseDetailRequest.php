@@ -11,6 +11,13 @@ class CourseDetailRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'content_link' => $this->content_link === '' ? null : $this->content_link,
+        ]);
+    }
+
     public function rules(): array
     {
         return [
@@ -18,15 +25,14 @@ class CourseDetailRequest extends FormRequest
             'title'        => 'nullable|string|max:255',
             'description'  => 'nullable|string',
 
-            // مش required
             'content_type' => 'nullable|in:video,pdf,file,zoom',
 
-            'content_link' => 'sometimes|required_if:content_type,video,zoom|url',
-            'file'         => 'sometimes|required_if:content_type,pdf,file|file|mimes:pdf,doc,docx,ppt,pptx|max:5120',
+            'content_link' => 'required_if:content_type,video,zoom|nullable|url',
+
+            'file' => 'required_if:content_type,pdf,file|nullable|file|mimes:pdf,doc,docx,ppt,pptx|max:5120',
 
             'session_date' => 'nullable|date',
             'session_time' => 'nullable|date_format:H:i',
         ];
     }
 }
-    
