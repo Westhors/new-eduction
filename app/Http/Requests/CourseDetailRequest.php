@@ -14,7 +14,7 @@ class CourseDetailRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'content_link' => $this->content_link === '' ? null : $this->content_link,
+            'content_link' => $this->content_link === 'https://youtu.be/HndV87XpkWg?si=tVb_nwuVWHCRtSWL' ? null : $this->content_link,
         ]);
     }
 
