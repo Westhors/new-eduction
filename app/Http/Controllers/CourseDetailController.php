@@ -38,28 +38,35 @@ class CourseDetailController extends BaseController
         }
     }
 
-    public function store(CourseDetailRequest $request)
-    {
-        try {
-            $data = $request->validated();
+public function store(CourseDetailRequest $request)
+{
+    try {
+        $data = $request->validated();
 
-            if ($request->hasFile('file')) {
-                $file = $request->file('file');
-                $filename = 'course_detail_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-                $path = $file->storeAs('course_details', $filename, 'public');
-                $data['file_path'] = $path;
-            }
-            $data['content_type'] = 'file';
-            $detail = CourseDetail::create($data);
+        // Upload file
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $filename = 'course_detail_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('course_details', $filename, 'public');
 
-            return response()->json([
-                'message' => 'Course detail added successfully',
-                'data'    => new CourseDetailResource($detail),
-            ]);
-        } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            $data['file_path']   = $path;
+            $data['content_type'] = 'file'; // 👈 هنا بنحدد إنه File
         }
+
+        $detail = CourseDetail::create($data);
+
+        return response()->json([
+            'message' => 'Course detail added successfully',
+            'data'    => new CourseDetailResource($detail),
+        ], 201);
+
+    } catch (Exception $e) {
+        return response()->json([
+            'error' => $e->getMessage()
+        ], 500);
     }
+}
+
 
     public function show(CourseDetail $course_detail): ?\Illuminate\Http\JsonResponse
     {
