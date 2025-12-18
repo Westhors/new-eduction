@@ -49,7 +49,7 @@ class CourseDetailController extends BaseController
                 $path = $file->storeAs('course_details', $filename, 'public');
                 $data['file_path'] = $path;
             }
-
+            $data['content_type'] = 'file';
             $detail = CourseDetail::create($data);
 
             return response()->json([
