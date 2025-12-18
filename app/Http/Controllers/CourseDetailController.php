@@ -43,14 +43,15 @@ public function store(CourseDetailRequest $request)
     try {
         $data = $request->validated();
 
-        // Upload file
+        // 👇 Default content_type = file
+        $data['content_type'] = $data['content_type'] ?? 'file';
+
         if ($request->hasFile('file')) {
             $file = $request->file('file');
             $filename = 'course_detail_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
             $path = $file->storeAs('course_details', $filename, 'public');
 
-            $data['file_path']   = $path;
-            $data['content_type'] = 'file'; // 👈 هنا بنحدد إنه File
+            $data['file_path'] = $path;
         }
 
         $detail = CourseDetail::create($data);
@@ -61,11 +62,10 @@ public function store(CourseDetailRequest $request)
         ], 201);
 
     } catch (Exception $e) {
-        return response()->json([
-            'error' => $e->getMessage()
-        ], 500);
+        return response()->json(['error' => $e->getMessage()], 500);
     }
 }
+
 
 
     public function show(CourseDetail $course_detail): ?\Illuminate\Http\JsonResponse
