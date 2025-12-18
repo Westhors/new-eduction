@@ -5,7 +5,7 @@
 
 /**
  * A helper file for Laravel, to provide autocomplete information to your IDE
- * Generated for Laravel 11.46.0.
+ * Generated for Laravel 11.47.0.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -14385,6 +14385,34 @@ namespace Illuminate\Support\Facades {
         }
 
         /**
+         * Sets the list of HTTP methods that can be overridden.
+         * 
+         * Set to null to allow all methods to be overridden (default). Set to an
+         * empty array to disallow overrides entirely. Otherwise, provide the list
+         * of uppercased method names that are allowed.
+         *
+         * @param \Symfony\Component\HttpFoundation\uppercase-string[]|null $methods
+         * @static
+         */
+        public static function setAllowedHttpMethodOverride($methods)
+        {
+            //Method inherited from \Symfony\Component\HttpFoundation\Request 
+            return \Illuminate\Http\Request::setAllowedHttpMethodOverride($methods);
+        }
+
+        /**
+         * Gets the list of HTTP methods that can be overridden.
+         *
+         * @return \Symfony\Component\HttpFoundation\uppercase-string[]|null
+         * @static
+         */
+        public static function getAllowedHttpMethodOverride()
+        {
+            //Method inherited from \Symfony\Component\HttpFoundation\Request 
+            return \Illuminate\Http\Request::getAllowedHttpMethodOverride();
+        }
+
+        /**
          * Whether the request contains a Session which was started in one of the
          * previous requests.
          *
@@ -14481,7 +14509,7 @@ namespace Illuminate\Support\Facades {
          * 
          * Suppose this request is instantiated from /mysite on localhost:
          * 
-         *  * http://localhost/mysite              returns an empty string
+         *  * http://localhost/mysite              returns '/'
          *  * http://localhost/mysite/about        returns '/about'
          *  * http://localhost/mysite/enco%20ded   returns '/enco%20ded'
          *  * http://localhost/mysite/about?var=1  returns '/about'
@@ -14815,7 +14843,18 @@ namespace Illuminate\Support\Facades {
 
         /**
          * Gets the format associated with the mime type.
+         * 
+         * Resolution order:
+         *   1) Exact match on the full MIME type (e.g. "application/json").
+         *   2) Match on the canonical MIME type (i.e. before the first ";" parameter).
+         *   3) If the type is "application/*+suffix", use the structured syntax suffix
+         *      mapping (e.g. "application/foo+json" → "json"), when available.
+         *   4) If $subtypeFallback is true and no match was found:
+         *      - return the MIME subtype (without "x-" prefix), provided it does not
+         *        contain a "+" (e.g. "application/x-yaml" → "yaml", "text/csv" → "csv").
          *
+         * @param string|null $mimeType The mime type to check
+         * @param bool $subtypeFallback Whether to fall back to the subtype if no exact match is found
          * @static
          */
         public static function getFormat($mimeType)
@@ -14828,6 +14867,7 @@ namespace Illuminate\Support\Facades {
         /**
          * Associates a format with mime types.
          *
+         * @param string $format The format to set
          * @param string|string[] $mimeTypes The associated mime types (the preferred one must be the first as it will be used as the content type)
          * @static
          */
@@ -22873,6 +22913,147 @@ namespace Barryvdh\DomPDF\Facade {
             }
     }
 
+namespace Laravel\Socialite\Facades {
+    /**
+     */
+    class Socialite extends \Illuminate\Support\Manager {
+        /**
+         * Get a driver instance.
+         *
+         * @param string $driver
+         * @return mixed
+         * @static
+         */
+        public static function with($driver)
+        {
+            /** @var \Laravel\Socialite\SocialiteManager $instance */
+            return $instance->with($driver);
+        }
+
+        /**
+         * Build an OAuth 2 provider instance.
+         *
+         * @param string $provider
+         * @param array $config
+         * @return \Laravel\Socialite\Two\AbstractProvider
+         * @static
+         */
+        public static function buildProvider($provider, $config)
+        {
+            /** @var \Laravel\Socialite\SocialiteManager $instance */
+            return $instance->buildProvider($provider, $config);
+        }
+
+        /**
+         * Format the server configuration.
+         *
+         * @param array $config
+         * @return array
+         * @static
+         */
+        public static function formatConfig($config)
+        {
+            /** @var \Laravel\Socialite\SocialiteManager $instance */
+            return $instance->formatConfig($config);
+        }
+
+        /**
+         * Forget all of the resolved driver instances.
+         *
+         * @return \Laravel\Socialite\SocialiteManager
+         * @static
+         */
+        public static function forgetDrivers()
+        {
+            /** @var \Laravel\Socialite\SocialiteManager $instance */
+            return $instance->forgetDrivers();
+        }
+
+        /**
+         * Set the container instance used by the manager.
+         *
+         * @param \Illuminate\Contracts\Container\Container $container
+         * @return \Laravel\Socialite\SocialiteManager
+         * @static
+         */
+        public static function setContainer($container)
+        {
+            /** @var \Laravel\Socialite\SocialiteManager $instance */
+            return $instance->setContainer($container);
+        }
+
+        /**
+         * Get the default driver name.
+         *
+         * @return string
+         * @throws \InvalidArgumentException
+         * @static
+         */
+        public static function getDefaultDriver()
+        {
+            /** @var \Laravel\Socialite\SocialiteManager $instance */
+            return $instance->getDefaultDriver();
+        }
+
+        /**
+         * Get a driver instance.
+         *
+         * @param string|null $driver
+         * @return mixed
+         * @throws \InvalidArgumentException
+         * @static
+         */
+        public static function driver($driver = null)
+        {
+            //Method inherited from \Illuminate\Support\Manager 
+            /** @var \Laravel\Socialite\SocialiteManager $instance */
+            return $instance->driver($driver);
+        }
+
+        /**
+         * Register a custom driver creator Closure.
+         *
+         * @param string $driver
+         * @param \Closure $callback
+         * @return \Laravel\Socialite\SocialiteManager
+         * @static
+         */
+        public static function extend($driver, $callback)
+        {
+            //Method inherited from \Illuminate\Support\Manager 
+            /** @var \Laravel\Socialite\SocialiteManager $instance */
+            return $instance->extend($driver, $callback);
+        }
+
+        /**
+         * Get all of the created "drivers".
+         *
+         * @return array
+         * @static
+         */
+        public static function getDrivers()
+        {
+            //Method inherited from \Illuminate\Support\Manager 
+            /** @var \Laravel\Socialite\SocialiteManager $instance */
+            return $instance->getDrivers();
+        }
+
+        /**
+         * Get the container instance used by the manager.
+         *
+         * @return \Illuminate\Contracts\Container\Container
+         * @static
+         */
+        public static function getContainer()
+        {
+            //Method inherited from \Illuminate\Support\Manager 
+            /** @var \Laravel\Socialite\SocialiteManager $instance */
+            return $instance->getContainer();
+        }
+
+            }
+    }
+
 namespace Maatwebsite\Excel\Facades {
     /**
      */
@@ -28013,6 +28194,7 @@ namespace  {
     class Vite extends \Illuminate\Support\Facades\Vite {}
     class PDF extends \Barryvdh\DomPDF\Facade\Pdf {}
     class Pdf extends \Barryvdh\DomPDF\Facade\Pdf {}
+    class Socialite extends \Laravel\Socialite\Facades\Socialite {}
     class Excel extends \Maatwebsite\Excel\Facades\Excel {}
 }
 
