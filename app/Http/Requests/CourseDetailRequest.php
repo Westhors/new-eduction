@@ -18,7 +18,7 @@ class CourseDetailRequest extends FormRequest
             'title'        => 'nullable|string|max:255',
             'description'  => 'nullable|string',
             'content_type' => 'nullable|in:video,pdf,file,zoom',
-            'content_link' => 'nullable|url|required_if:content_type,video,zoom',
+            'content_link' => 'nullable|string',
             'file'         => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx|max:5120|required_if:content_type,pdf,file',
 
             'session_date' => 'nullable|date',        // يوم الحصة
