@@ -10,6 +10,7 @@ use App\Http\Requests\UpdateProfileTeacherTwoRequest;
 use App\Http\Requests\UpdateTeacherCommissionRequest;
 use App\Http\Resources\TeacherResource;
 use App\Interfaces\TeacherRepositoryInterface;
+use App\Mail\TeacherWelcomeMail;
 use App\Models\Course;
 use App\Models\Student;
 use App\Models\Teacher;
@@ -19,6 +20,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class TeacherController extends BaseController
 {
@@ -178,15 +180,20 @@ class TeacherController extends BaseController
     public function register(TeacherRequest $request)
     {
         try {
+            // 1️⃣ Validate data
             $data = $request->validated();
-            $data['password'] = Hash::make($data['password']);
 
+            // 2️⃣ Hash password
+            $data['password'] = Hash::make($data['password']);
+            $data['active'] = true; // فعل الحساب تلقائيًا عند التسجيل
+
+            // 3️⃣ Upload files
             $files = [
                 'image'             => 'teachers/profile',
                 'certificate_image' => 'teachers/certificates',
                 'experience_image'  => 'teachers/experience',
-                'id_card_front'  => 'teachers/idCardFront',
-                'id_card_back'  => 'teachers/idCardBack',
+                'id_card_front'     => 'teachers/idCardFront',
+                'id_card_back'      => 'teachers/idCardBack',
             ];
 
             foreach ($files as $field => $folder) {
@@ -198,19 +205,16 @@ class TeacherController extends BaseController
                 }
             }
 
-            // حذف stage_id و subject_id من الـ data قبل الإنشاء
-            $stageIds = $data['stage_id'];
-            $subjectIds = $data['subject_id'];
-            unset($data['stage_id'], $data['subject_id']);
-
+            // 4️⃣ Create teacher
             $teacher = $this->crudRepository->create($data);
 
-            // ربط العلاقات
-            $teacher->stages()->sync($stageIds);
-            $teacher->subjects()->sync($subjectIds);
-
+            // 5️⃣ Create token
             $token = $teacher->createToken('teacher_token')->plainTextToken;
 
+            // 6️⃣ Send welcome email
+            Mail::to($teacher->email)->send(new TeacherWelcomeMail($teacher));
+
+            // 7️⃣ Response
             return JsonResponse::respondSuccess([
                 'message' => 'Teacher registered successfully',
                 'teacher' => new TeacherResource($teacher->load(['stages', 'subjects'])),

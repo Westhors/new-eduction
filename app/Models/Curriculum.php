@@ -14,4 +14,9 @@ class Curriculum extends BaseModel
     protected $casts = [
         'active' => 'boolean'
     ];
+
+    public function stages()
+    {
+        return $this->hasMany(Stage::class);
+    }
 }

@@ -24,8 +24,8 @@ class StudentRequest extends FormRequest
         return [
             'name' => 'required|string',
             'phone' => 'nullable|string',
-            'stage_id' => 'required',
-            'country_id' => 'required',
+            'stage_id' => 'nullable',
+            'country_id' => 'nullable',
             'birth_day' => 'nullable|date|date_format:Y-m-d',
             'email' => 'nullable|email|unique:students,email,' . $this->student?->id,
             'password'    => 'nullable|string|min:6|confirmed',
