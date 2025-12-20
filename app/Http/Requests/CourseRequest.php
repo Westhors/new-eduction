@@ -28,7 +28,7 @@ class CourseRequest extends FormRequest
             'country_id'       => 'nullable|exists:countries,id',
             'title'            => 'required|string|max:255',
             'description'      => 'nullable|string',
-            'semester'             => 'required|in:one,two',
+            'semester'             => 'required|in:one,two,three',
             // 'type'             => 'required|in:online,recorded',
             // 'course_type'      => 'nullable|in:private,group',
             // 'count_student'    => 'nullable|numeric|min:0',
