@@ -41,6 +41,7 @@ Route::get('admin/dashboard-stats', [AdminController::class, 'index']);
 
 
 //////////////////////////////////////////////////////////Teacher//////////////////////////////////////
+Route::middleware('auth:sanctum')->post('logout', [TeacherController::class, 'logout']);
 
 Route::post('teachers/register', [TeacherController::class, 'register']);
 Route::post('teachers/login', [TeacherController::class, 'login']);

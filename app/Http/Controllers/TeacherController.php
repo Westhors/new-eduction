@@ -422,5 +422,26 @@ class TeacherController extends BaseController
             ], 500);
         }
     }
+
+
+     public function logout(Request $request): JsonResponse
+    {
+        try {
+            // يمسح كل التوكنات الخاصة بالمستخدم الحالي
+            $request->user()->tokens()->delete();
+
+            return response()->json([
+                'status' => 200,
+                'result' => 'Success',
+                'message' => 'Logged out from all devices successfully',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 500,
+                'result' => 'Error',
+                'message' => $e->getMessage(),
+            ]);
+        }
+    }
 }
 
