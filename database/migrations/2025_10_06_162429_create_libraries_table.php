@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title')->nullable();
             $table->string('type')->nullable();
             $table->text('description')->nullable();
-            $table->string('file_path'); // المسار في storage
+            $table->string('file_path')->nullable();
             $table->string('thumbnail_path')->nullable();
             $table->timestamps();
         });
