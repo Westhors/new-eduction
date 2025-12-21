@@ -37,6 +37,19 @@ class LibraryController extends Controller
         return LibraryResource::collection($libraries)->response();
     }
 
+    public function jobIndex(Request $request)
+    {
+        $query = Library::query()->orderBy('created_at', 'desc');
+
+        // جلب العناصر التي نوعها teacher فقط
+        $query->where('type', 'job');
+
+        $libraries = $query->paginate(12);
+
+        return LibraryResource::collection($libraries)->response();
+    }
+
+
     public function store(LibraryRequest $request)
     {
         try {

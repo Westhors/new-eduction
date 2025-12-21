@@ -22,7 +22,7 @@ class LibraryRequest extends FormRequest
         return [
             'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'type' => 'nullable|in:student,teacher',
+            'type' => 'nullable|in:student,teacher,job',
             // file rules
             'file' => ($isUpdate ? 'nullable|' : 'required|') . 'file|mimes:pdf,mp4,mov,avi,wmv,mkv,jpg,jpeg,png|max:51200',
             // max:51200 => 50MB (size in kilobytes). عدّل حسب احتياجك

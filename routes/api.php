@@ -198,8 +198,8 @@ Route::get('contact-us', [ContactUsController::class, 'index']);
 
 Route::post('student-libraries', [LibraryController::class, 'studentIndex']);
 Route::post('teacher-libraries', [LibraryController::class, 'teacherIndex']);
+Route::post('job-libraries', [LibraryController::class, 'jobIndex']); //
 Route::apiResource('libraries', LibraryController::class);
-
 
 
 Route::get('/report-homepage', [TeacherController::class, 'report']);
