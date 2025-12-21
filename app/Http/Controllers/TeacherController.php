@@ -424,24 +424,11 @@ class TeacherController extends BaseController
     }
 
 
-     public function logout(Request $request): JsonResponse
+    public function logout(Request $request)
     {
-        try {
-            // يمسح كل التوكنات الخاصة بالمستخدم الحالي
-            $request->user()->tokens()->delete();
+        $request->user()->tokens()->delete();
 
-            return response()->json([
-                'status' => 200,
-                'result' => 'Success',
-                'message' => 'Logged out from all devices successfully',
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 500,
-                'result' => 'Error',
-                'message' => $e->getMessage(),
-            ]);
-        }
+        return JsonResponse::respondSuccess('Logged out successfully');
     }
 }
 
