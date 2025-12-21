@@ -32,8 +32,13 @@ class UpdateProfileTeacherTwoRequest extends FormRequest
             'certificate_image' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
             'experience_image' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
             'country_id' => 'nullable|exists:countries,id',
-            'stage_id' => 'nullable|exists:stages,id',
-            'subject_id' => 'nullable|exists:subjects,id',
+            
+'stage_id' => 'nullable|array',
+'stage_id.*' => 'exists:stages,id',
+
+'subject_id' => 'nullable|array',
+'subject_id.*' => 'exists:subjects,id',
+
             'bank_name' => 'nullable|string|max:255',
 
             'account_holder_name' => 'nullable|string|max:255',

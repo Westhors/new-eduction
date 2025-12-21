@@ -291,23 +291,44 @@ class TeacherController extends BaseController
 
             $data = $request->validated();
 
+            /*
+            |--------------------------------------------------------------------------
+            | Password
+            |--------------------------------------------------------------------------
+            */
             if (!empty($data['password'])) {
                 $data['password'] = Hash::make($data['password']);
             } else {
                 unset($data['password']);
             }
 
+            /*
+            |--------------------------------------------------------------------------
+            | Extract stages & subjects
+            |--------------------------------------------------------------------------
+            */
+            $stages   = $data['stage_id'] ?? null;
+            $subjects = $data['subject_id'] ?? null;
+
+            unset($data['stage_id'], $data['subject_id']);
+
+            /*
+            |--------------------------------------------------------------------------
+            | Files upload
+            |--------------------------------------------------------------------------
+            */
             $files = [
                 'image'             => 'teachers/profile',
                 'certificate_image' => 'teachers/certificates',
                 'experience_image'  => 'teachers/experience',
-                'id_card_front'  => 'teachers/idCardFront',
-                'id_card_back'  => 'teachers/idCardBack',
+                'id_card_front'     => 'teachers/idCardFront',
+                'id_card_back'      => 'teachers/idCardBack',
             ];
 
             foreach ($files as $field => $folder) {
                 if ($request->hasFile($field)) {
-                    // امسح القديم لو موجود
+
+                    // delete old file
                     if ($teacher->$field && \Storage::disk('public')->exists($teacher->$field)) {
                         \Storage::disk('public')->delete($teacher->$field);
                     }
@@ -315,24 +336,58 @@ class TeacherController extends BaseController
                     $file = $request->file($field);
                     $filename = $field . '_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
                     $path = $file->storeAs($folder, $filename, 'public');
+
                     $data[$field] = $path;
                 }
             }
 
+            /*
+            |--------------------------------------------------------------------------
+            | Update teacher main data
+            |--------------------------------------------------------------------------
+            */
             $this->crudRepository->update($data, $teacher->id);
 
-            activity()->performedOn($teacher)
+            /*
+            |--------------------------------------------------------------------------
+            | Sync stages & subjects (Many To Many)
+            |--------------------------------------------------------------------------
+            */
+            if ($stages !== null) {
+                $teacher->stages()->sync($stages);
+            }
+
+            if ($subjects !== null) {
+                $teacher->subjects()->sync($subjects);
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Activity log
+            |--------------------------------------------------------------------------
+            */
+            activity()
+                ->performedOn($teacher)
                 ->withProperties(['attributes' => $teacher])
                 ->log('update_profile');
 
+            /*
+            |--------------------------------------------------------------------------
+            | Response
+            |--------------------------------------------------------------------------
+            */
             return JsonResponse::respondSuccess([
                 'message' => 'Profile updated successfully',
-                'teacher' => new TeacherResource($teacher->fresh()), // عشان نرجع البيانات بعد التحديث
+                'teacher' => new TeacherResource(
+                    $teacher->fresh(['stages', 'subjects'])
+                ),
             ]);
+
         } catch (\Exception $e) {
             return JsonResponse::respondError($e->getMessage());
         }
     }
+
 
 
 
