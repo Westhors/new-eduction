@@ -14,7 +14,8 @@ class Teacher extends BaseModel
     protected $guarded = ['id'];
 
     protected $casts = [
-        'active' => 'boolean'
+        'active' => 'boolean',
+        
     ];
 
     public function courses(): HasMany
