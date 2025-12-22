@@ -200,6 +200,7 @@ Route::get('contact-us', [ContactUsController::class, 'index']);
 Route::post('student-libraries', [LibraryController::class, 'studentIndex']);
 Route::post('teacher-libraries', [LibraryController::class, 'teacherIndex']);
 Route::post('job-libraries', [LibraryController::class, 'jobIndex']); //
+Route::delete('libraries/{library}', [LibraryController::class, 'destroy']);
 Route::apiResource('libraries', LibraryController::class);
 
 
