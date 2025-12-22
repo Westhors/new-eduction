@@ -14,7 +14,7 @@ class SubjectResource extends JsonResource
             'postion' => $this->postion ?? null,
             'active' => $this->active ?? null,
             'image' => $this->image ? asset('storage/' . $this->image) : null,
-            'stage' => new StageResource($this->stage),
+            'stages' => StageResource::collection($this->stages),
         ];
     }
 }

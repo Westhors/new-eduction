@@ -161,7 +161,7 @@ Route::delete('subject/force-delete', [SubjectController::class, 'forceDelete'])
 Route::post('subject/update/{subject}', [SubjectController::class, 'forceUpdate']);
 Route::put('/subject/{id}/{column}', [SubjectController::class, 'toggle']);
 Route::apiResource('subject', SubjectController::class);
-
+Route::post('subject/list-by-stage', [SubjectController::class, 'listSubjects']);
 //////////////////////////////////////////////////////////Subject//////////////////////////////////////
 
 

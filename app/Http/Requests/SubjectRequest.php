@@ -25,7 +25,8 @@ class SubjectRequest extends FormRequest
             'name' => 'required|string',
             'postion' => 'nullable',
             'active' => 'boolean',
-            'stage_id' => 'required|exists:stages,id',
+            'stage_ids' => 'required|array',
+            'stage_ids.*' => 'exists:stages,id',
         ];
     }
 }

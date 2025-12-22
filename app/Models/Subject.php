@@ -16,9 +16,9 @@ class Subject extends BaseModel
         'active' => 'boolean'
     ];
 
-    public function stage(): BelongsTo
+    public function stages()
     {
-        return $this->belongsTo(Stage::class);
+        return $this->belongsToMany(Stage::class, 'stage_subject');
     }
 
 }

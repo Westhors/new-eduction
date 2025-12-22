@@ -25,5 +25,11 @@ class Stage extends BaseModel
         return $this->belongsTo(Curriculum::class);
     }
 
+    public function subjects()
+    {
+        return $this->belongsToMany(Subject::class, 'stage_subject');
+    }
+
+
 }
 

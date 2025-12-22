@@ -11,14 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('subjects', function (Blueprint $table) {
+        Schema::create('stage_subject', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
-            $table->string('image')->nullable();
-            //$table->foreignId('stage_id')->constrained()->cascadeOnDelete();
-            $table->integer('postion')->nullable();
-            $table->boolean('active')->default(1);
-            $table->softDeletes();
+            $table->foreignId('subject_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('stage_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -28,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('subjects');
+        Schema::dropIfExists('stage_subject');
     }
 };
