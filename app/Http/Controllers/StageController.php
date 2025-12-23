@@ -46,8 +46,8 @@ class StageController extends BaseController
             $filters = $request->input('filters', []);
             $orderBy = $request->input('orderBy', 'id');
             $orderByDirection = $request->input('orderByDirection', 'asc');
-            $perPage = $request->input('perPage', 10);
-            $paginate = $request->boolean('paginate', true);
+            $perPage = $request->input('perPage', 100);
+            $paginate = $request->boolean('paginate', false);
 
             $query = Stage::whereHas('curricula', function ($q) use ($curriculumId) {
                 $q->where('curricula.id', $curriculumId);
@@ -79,7 +79,6 @@ class StageController extends BaseController
             return JsonResponse::respondError($e->getMessage());
         }
     }
-
 
 
     public function store(StageRequest $request)
