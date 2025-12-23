@@ -37,25 +37,7 @@ class CourseRequest extends FormRequest
             'discount'         => 'nullable|numeric|min:0|max:100',
             'what_you_will_learn' => 'nullable|string',
             'file'         => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx|max:5120|required_if:content_type,pdf,file',
-            'image' => [
-                'nullable',
-                function($attribute, $value, $fail) {
-                    // لو هو رابط URL
-                    if (filter_var($value, FILTER_VALIDATE_URL)) {
-                        return; // الرابط صحيح، يبقى مقبول
-                    }
-
-                    // لو هو ملف
-                    if (request()->hasFile('image')) {
-                        $file = request()->file('image');
-                        if (!$file->isValid() || !in_array($file->extension(), ['jpg','jpeg','png'])) {
-                            $fail($attribute.' must be a valid image file.');
-                        }
-                    } else {
-                        $fail($attribute.' must be a valid image URL or uploaded file.');
-                    }
-                }
-            ],
+            'image'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             // 'intro_video_url'  => 'nullable|url',
         ];
     }
