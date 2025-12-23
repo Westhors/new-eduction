@@ -17,6 +17,7 @@ class Curriculum extends BaseModel
 
     public function stages()
     {
-        return $this->hasMany(Stage::class);
+        return $this->belongsToMany(Stage::class, 'stage_curriculum');
     }
+
 }

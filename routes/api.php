@@ -148,6 +148,7 @@ Route::delete('stage/force-delete', [StageController::class, 'forceDelete']);
 Route::post('stage/update/{stage}', [StageController::class, 'forceUpdate']);
 Route::put('/stage/{id}/{column}', [StageController::class, 'toggle']);
 Route::apiResource('stage', StageController::class);
+Route::post('stage/list-by-curriculum', [StageController::class, 'listStages']);
 
 //////////////////////////////////////////////////////////Stage//////////////////////////////////////
 

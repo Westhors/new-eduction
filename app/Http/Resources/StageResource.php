@@ -15,7 +15,7 @@ class StageResource extends JsonResource
             'active' => $this->active ?? null,
             'image' => $this->image ? asset('storage/' . $this->image) : null,
             'country' => new CountryResource($this->country),
-            'curriculum' => new CurriculaResource($this->curriculum),
+            'curricula' => CurriculaResource::collection($this->curricula),
         ];
     }
 }

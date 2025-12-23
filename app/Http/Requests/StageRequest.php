@@ -26,7 +26,10 @@ class StageRequest extends FormRequest
             'postion' => 'nullable',
             'active' => 'boolean',
             'country_id' => 'required|exists:countries,id',
-            'curriculum_id' => 'nullable|exists:curricula,id',
+
+            // 👇 curricula
+            'curriculum_ids' => 'required|array',
+            'curriculum_ids.*' => 'exists:curricula,id',
         ];
     }
 }

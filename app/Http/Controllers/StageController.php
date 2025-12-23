@@ -31,6 +31,57 @@ class StageController extends BaseController
             return JsonResponse::respondError($e->getMessage());
         }
     }
+
+
+
+    public function listStages(Request $request)
+    {
+        try {
+            $curriculumId = $request->input('curriculum_id');
+
+            if (!$curriculumId) {
+                return JsonResponse::respondError('curriculum_id is required');
+            }
+
+            $filters = $request->input('filters', []);
+            $orderBy = $request->input('orderBy', 'id');
+            $orderByDirection = $request->input('orderByDirection', 'asc');
+            $perPage = $request->input('perPage', 10);
+            $paginate = $request->boolean('paginate', true);
+
+            $query = Stage::whereHas('curricula', function ($q) use ($curriculumId) {
+                $q->where('curricula.id', $curriculumId);
+            });
+
+            // 🔍 فلترة بالاسم
+            if (!empty($filters['name'])) {
+                $query->where('name', 'like', '%' . $filters['name'] . '%');
+            }
+
+            // 🔍 فلترة active
+            if (isset($filters['active'])) {
+                $query->where('active', (bool) $filters['active']);
+            }
+
+            $query->orderBy($orderBy, $orderByDirection);
+
+            $stages = $paginate
+                ? $query->paginate($perPage)
+                : $query->get();
+
+            return StageResource::collection($stages)
+                ->additional([
+                    'message' => 'Stages fetched successfully',
+                    'result' => 'Success',
+                ]);
+
+        } catch (\Exception $e) {
+            return JsonResponse::respondError($e->getMessage());
+        }
+    }
+
+
+
     public function store(StageRequest $request)
     {
         try {
@@ -38,14 +89,20 @@ class StageController extends BaseController
 
             if ($request->hasFile('image')) {
                 $file = $request->file('image');
-                $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-                $path = $file->storeAs('stages', $filename, 'public');
-                $data['image'] = $path;
+                $filename = time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
+                $data['image'] = $file->storeAs('stages', $filename, 'public');
             }
 
-            $this->crudRepository->create($data);
+            $curriculumIds = $data['curriculum_ids'];
+            unset($data['curriculum_ids']);
+
+            $stage = $this->crudRepository->create($data);
+
+            // 🔗 ربط المناهج
+            $stage->curricula()->sync($curriculumIds);
 
             return JsonResponse::respondSuccess(trans(JsonResponse::MSG_ADDED_SUCCESSFULLY));
+
         } catch (Exception $e) {
             return JsonResponse::respondError($e->getMessage());
         }
@@ -68,19 +125,30 @@ class StageController extends BaseController
 
             if ($request->hasFile('image')) {
                 $file = $request->file('image');
-                $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+                $filename = time().'_'.uniqid().'.'.$file->getClientOriginalExtension();
 
                 if ($stage->image && \Storage::disk('public')->exists($stage->image)) {
                     \Storage::disk('public')->delete($stage->image);
                 }
 
-                $path = $file->storeAs('stages', $filename, 'public');
-                $data['image'] = $path;
+                $data['image'] = $file->storeAs('stages', $filename, 'public');
             }
 
+            $curriculumIds = $data['curriculum_ids'];
+            unset($data['curriculum_ids']);
+
             $this->crudRepository->update($data, $stage->id);
-            activity()->performedOn($stage)->withProperties(['attributes' => $stage])->log('update');
+
+            // 🔄 تحديث المناهج
+            $stage->curricula()->sync($curriculumIds);
+
+            activity()
+                ->performedOn($stage)
+                ->withProperties(['attributes' => $stage])
+                ->log('update');
+
             return JsonResponse::respondSuccess(trans(JsonResponse::MSG_UPDATED_SUCCESSFULLY));
+
         } catch (Exception $e) {
             return JsonResponse::respondError($e->getMessage());
         }
