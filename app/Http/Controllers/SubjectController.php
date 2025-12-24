@@ -45,8 +45,8 @@ class SubjectController extends BaseController
             $filters = $request->input('filters', []);
             $orderBy = $request->input('orderBy', 'id');
             $orderByDirection = $request->input('orderByDirection', 'asc');
-            $perPage = $request->input('perPage', 10);
-            $paginate = $request->boolean('paginate', true);
+            $perPage = $request->input('perPage', 100);
+            $paginate = $request->boolean('paginate', false);
 
             $query = Subject::whereHas('stages', function ($q) use ($stageId) {
                 $q->where('stages.id', $stageId);
