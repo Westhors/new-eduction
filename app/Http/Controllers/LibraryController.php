@@ -13,11 +13,10 @@ class LibraryController extends Controller
 {
 
 
-     public function studentIndex(Request $request)
+    public function studentIndex(Request $request)
     {
         $query = Library::query()->orderBy('created_at', 'desc');
 
-        // جلب العناصر التي نوعها teacher فقط
         $query->where('type', 'student');
 
         $libraries = $query->paginate(12);
@@ -29,7 +28,6 @@ class LibraryController extends Controller
     {
         $query = Library::query()->orderBy('created_at', 'desc');
 
-        // جلب العناصر التي نوعها teacher فقط
         $query->where('type', 'teacher');
 
         $libraries = $query->paginate(12);
@@ -41,7 +39,6 @@ class LibraryController extends Controller
     {
         $query = Library::query()->orderBy('created_at', 'desc');
 
-        // جلب العناصر التي نوعها teacher فقط
         $query->where('type', 'job');
 
         $libraries = $query->paginate(12);
@@ -49,6 +46,49 @@ class LibraryController extends Controller
         return LibraryResource::collection($libraries)->response();
     }
 
+    public function specialEducationIndex(Request $request)
+    {
+        $query = Library::query()->orderBy('created_at', 'desc');
+
+        $query->where('type', 'special_education');
+
+        $libraries = $query->paginate(12);
+
+        return LibraryResource::collection($libraries)->response();
+    }
+
+    public function leadershipManagementIndex(Request $request)
+    {
+        $query = Library::query()->orderBy('created_at', 'desc');
+
+        $query->where('type', 'special_education');
+
+        $libraries = $query->paginate(12);
+
+        return LibraryResource::collection($libraries)->response();
+    }
+
+    public function professionalDevelopmentIndex(Request $request)
+    {
+        $query = Library::query()->orderBy('created_at', 'desc');
+
+        $query->where('type', 'professional_development');
+
+        $libraries = $query->paginate(12);
+
+        return LibraryResource::collection($libraries)->response();
+    }
+
+    public function teacherBagIndex(Request $request)
+    {
+        $query = Library::query()->orderBy('created_at', 'desc');
+
+        $query->where('type', 'teacher_bag');
+
+        $libraries = $query->paginate(12);
+
+        return LibraryResource::collection($libraries)->response();
+    }
 
     public function store(LibraryRequest $request)
     {

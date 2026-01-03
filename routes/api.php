@@ -201,6 +201,10 @@ Route::get('contact-us', [ContactUsController::class, 'index']);
 Route::post('student-libraries', [LibraryController::class, 'studentIndex']);
 Route::post('teacher-libraries', [LibraryController::class, 'teacherIndex']);
 Route::post('job-libraries', [LibraryController::class, 'jobIndex']); //
+Route::post('special-education-libraries', [LibraryController::class, 'specialEducationIndex']);
+Route::post('leadership-management-libraries', [LibraryController::class, 'leadershipManagementIndex']);
+Route::post('professional-development-libraries', [LibraryController::class, 'professionalDevelopmentIndex']);
+Route::post('teacher-bag-libraries', [LibraryController::class, 'teacherBagIndex']);
 Route::delete('libraries/{library}', [LibraryController::class, 'destroy']);
 Route::apiResource('libraries', LibraryController::class);
 

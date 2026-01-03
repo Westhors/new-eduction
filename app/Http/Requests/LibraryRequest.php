@@ -22,7 +22,7 @@ class LibraryRequest extends FormRequest
         return [
             'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'type' => 'nullable|in:student,teacher,job',
+            'type' => 'nullable|in:student,teacher,job,special_education,leadership_management,professional_development,teacher_bag',
             // file rules
             'file' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx,mp4,mov,avi,wmv,mkv,jpg,jpeg,png|max:51200',
             // max:51200 => 50MB (size in kilobytes). عدّل حسب احتياجك
@@ -38,3 +38,4 @@ class LibraryRequest extends FormRequest
         ];
     }
 }
+
