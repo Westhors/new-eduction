@@ -61,7 +61,7 @@ class LibraryController extends Controller
     {
         $query = Library::query()->orderBy('created_at', 'desc');
 
-        $query->where('type', 'special_education');
+        $query->where('type', 'leadership_management');
 
         $libraries = $query->paginate(12);
 
