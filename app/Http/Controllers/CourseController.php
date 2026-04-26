@@ -55,38 +55,53 @@ class CourseController extends BaseController
     public function store(CourseRequest $request)
     {
         try {
+            $startTime = microtime(true);
+
             $data = $request->validated();
-            $data['teacher_id'] = Auth::user()->id;
+            $data['teacher_id'] = Auth::id();
 
             $originalPrice = $data['original_price'];
             $discount = $data['discount'] ?? 0;
 
-            if ($discount > 0) {
-                $finalPrice = $originalPrice - ($originalPrice * ($discount / 100));
-            } else {
-                $finalPrice = $originalPrice;
-            }
+            $data['price'] = $discount > 0
+                ? $originalPrice - ($originalPrice * ($discount / 100))
+                : $originalPrice;
 
-            $data['price'] = $finalPrice;
-
-
+            // upload image
             if ($request->hasFile('image')) {
-                $file = $request->file('image');
-                $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-                $path = $file->storeAs('courses', $filename, 'public');
-                $data['image'] = $path;
+                $image = $request->file('image');
+
+                $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+
+                $imagePath = $image->storeAs('courses', $imageName, 'public');
+
+                $data['image'] = $imagePath;
             }
 
+            // upload course file
             if ($request->hasFile('file')) {
                 $file = $request->file('file');
-                $filename = 'course_detail_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-                $path = $file->storeAs('course_details', $filename, 'public');
-                $data['file_path'] = $path;
+
+                $fileName = 'course_detail_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+                $filePath = $file->storeAs('course_details', $fileName, 'public');
+
+                $data['file_path'] = $filePath;
+
+                $data['file_size_mb'] = round($file->getSize() / 1024 / 1024, 2);
             }
 
-            $this->crudRepository->create($data);
+            $course = $this->crudRepository->create($data);
 
-            return JsonResponse::respondSuccess(trans(JsonResponse::MSG_ADDED_SUCCESSFULLY));
+            $uploadTime = round(microtime(true) - $startTime, 2);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'تم إضافة الكورس بنجاح',
+                'data' => $course,
+                'upload_time_seconds' => $uploadTime,
+                'uploaded_at' => now()->format('Y-m-d H:i:s'),
+            ]);
         } catch (Exception $e) {
             return JsonResponse::respondError($e->getMessage());
         }

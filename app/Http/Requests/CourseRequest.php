@@ -36,7 +36,7 @@ class CourseRequest extends FormRequest
             'original_price'            => 'required|numeric|min:0',
             'discount'         => 'nullable|numeric|min:0|max:100',
             'what_you_will_learn' => 'nullable|string',
-            'file'         => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx|max:5120|required_if:content_type,pdf,file',
+            'file'         => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx|max:31744|required_if:content_type,pdf,file',
             'image'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             // 'intro_video_url'  => 'nullable|url',
         ];
