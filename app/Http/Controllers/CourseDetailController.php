@@ -162,7 +162,7 @@ class CourseDetailController extends BaseController
     }
 
 
-    public function uploadFile(Request $request, $id)
+    public function uploadBdfCourse(Request $request, $id)
     {
         $course = CourseDetail::findOrFail($id);
 
