@@ -211,4 +211,6 @@ Route::apiResource('libraries', LibraryController::class);
 
 Route::get('/report-homepage', [TeacherController::class, 'report']);
 
+Route::post('course-detail/{id}/upload-file', [CourseDetailController::class, 'uploadBdfCourse']);
+
 

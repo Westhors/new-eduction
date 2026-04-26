@@ -161,5 +161,31 @@ class CourseDetailController extends BaseController
         return response()->json(['message' => 'Watching data saved successfully']);
     }
 
+
+    public function uploadFile(Request $request, $id)
+    {
+        $course = CourseDetail::findOrFail($id);
+
+        $request->validate([
+            'file' => 'required|file|mimes:pdf,doc,docx,ppt,pptx|max:31744'
+        ]);
+
+        $file = $request->file('file');
+
+        $name = 'course_' . time() . '.' . $file->getClientOriginalExtension();
+
+        $path = $file->storeAs('course_files', $name, 'public');
+
+        $course->update([
+            'file_path' => $path
+        ]);
+
+        return response()->json([
+            'message' => 'File uploaded successfully',
+            'course_id' => $course->id,
+            'file_url' => asset('storage/' . $path)
+        ]);
+    }
+
 }
 

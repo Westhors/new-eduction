@@ -55,53 +55,38 @@ class CourseController extends BaseController
     public function store(CourseRequest $request)
     {
         try {
-            $startTime = microtime(true);
-
             $data = $request->validated();
-            $data['teacher_id'] = Auth::id();
+            $data['teacher_id'] = Auth::user()->id;
 
             $originalPrice = $data['original_price'];
             $discount = $data['discount'] ?? 0;
 
-            $data['price'] = $discount > 0
-                ? $originalPrice - ($originalPrice * ($discount / 100))
-                : $originalPrice;
-
-            // upload image
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-
-                $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
-
-                $imagePath = $image->storeAs('courses', $imageName, 'public');
-
-                $data['image'] = $imagePath;
+            if ($discount > 0) {
+                $finalPrice = $originalPrice - ($originalPrice * ($discount / 100));
+            } else {
+                $finalPrice = $originalPrice;
             }
 
-            // upload course file
+            $data['price'] = $finalPrice;
+
+
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+                $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+                $path = $file->storeAs('courses', $filename, 'public');
+                $data['image'] = $path;
+            }
+
             if ($request->hasFile('file')) {
                 $file = $request->file('file');
-
-                $fileName = 'course_detail_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-
-                $filePath = $file->storeAs('course_details', $fileName, 'public');
-
-                $data['file_path'] = $filePath;
-
-                $data['file_size_mb'] = round($file->getSize() / 1024 / 1024, 2);
+                $filename = 'course_detail_' . time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+                $path = $file->storeAs('course_details', $filename, 'public');
+                $data['file_path'] = $path;
             }
 
-            $course = $this->crudRepository->create($data);
+            $this->crudRepository->create($data);
 
-            $uploadTime = round(microtime(true) - $startTime, 2);
-
-            return response()->json([
-                'status' => true,
-                'message' => 'تم إضافة الكورس بنجاح',
-                'data' => $course,
-                'upload_time_seconds' => $uploadTime,
-                'uploaded_at' => now()->format('Y-m-d H:i:s'),
-            ]);
+            return JsonResponse::respondSuccess(trans(JsonResponse::MSG_ADDED_SUCCESSFULLY));
         } catch (Exception $e) {
             return JsonResponse::respondError($e->getMessage());
         }
