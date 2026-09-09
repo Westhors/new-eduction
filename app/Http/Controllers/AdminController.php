@@ -15,6 +15,7 @@ class AdminController extends Controller
     public function index()
     {
         try {
+            
             $total_students = Student::count();
             $total_courses = Course::count();
             $total_instructors = Teacher::count();
