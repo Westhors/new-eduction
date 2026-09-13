@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminMessageController;
+use App\Http\Controllers\Api\StripeController;
 use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CouponController;
@@ -214,3 +215,7 @@ Route::get('/report-homepage', [TeacherController::class, 'report']);
 Route::post('course-detail/{id}/upload-file', [CourseDetailController::class, 'uploadBdfCourse']);
 
 
+
+
+
+Route::post('/stripe/checkout', [StripeController::class, 'checkout']);
