@@ -83,18 +83,18 @@ Route::delete('/courses/{course_id}/remove-student/{student_id}', [CourseControl
 
 
 //////////////////////////////////////////////////////////Course Details//////////////////////////////////////
-    Route::post('course-detail/index', [CourseDetailController::class, 'index']);
-    Route::post('course-detail/restore', [CourseDetailController::class, 'restore']);
-    Route::delete('course-detail/delete', [CourseDetailController::class, 'destroy']);
-    Route::delete('course-detail/force-delete', [CourseDetailController::class, 'forceDelete']);
-    Route::post('course-detail/update/{course_detail}', [CourseDetailController::class, 'forceUpdate']);
-    Route::put('/course-detail/{id}/{column}', [CourseDetailController::class, 'toggle']);
-    Route::apiResource('course-detail', CourseDetailController::class);
-    Route::middleware('auth:students')->group(function () {
-        Route::post('student/course-detail/watch', [CourseDetailController::class, 'saveWatchingData']);
-    });
+Route::post('course-detail/index', [CourseDetailController::class, 'index']);
+Route::post('course-detail/restore', [CourseDetailController::class, 'restore']);
+Route::delete('course-detail/delete', [CourseDetailController::class, 'destroy']);
+Route::delete('course-detail/force-delete', [CourseDetailController::class, 'forceDelete']);
+Route::post('course-detail/update/{course_detail}', [CourseDetailController::class, 'forceUpdate']);
+Route::put('/course-detail/{id}/{column}', [CourseDetailController::class, 'toggle']);
+Route::apiResource('course-detail', CourseDetailController::class);
+Route::middleware('auth:students')->group(function () {
+    Route::post('student/course-detail/watch', [CourseDetailController::class, 'saveWatchingData']);
+});
 
-    Route::get('student-course/{course}', [CourseController::class, 'show']);
+Route::get('student-course/{course}', [CourseController::class, 'show']);
 //////////////////////////////////////////////////////////Course Details//////////////////////////////////////
 
 
@@ -218,4 +218,4 @@ Route::post('course-detail/{id}/upload-file', [CourseDetailController::class, 'u
 
 
 
-Route::post('/stripe/checkout', [StripeController::class, 'checkout']);
+Route::middleware('auth:sanctum')->post('/stripe/checkout', [StripeController::class, 'checkout']);

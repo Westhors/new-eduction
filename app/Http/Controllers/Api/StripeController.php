@@ -14,6 +14,7 @@ class StripeController extends Controller
             'amount' => 'required|numeric|min:1',
             'currency' => 'required|string|size:3',
             'product_name' => 'required|string|max:255',
+            'course_id' => 'required|integer',
         ]);
 
         $stripe = new StripeClient(
@@ -39,9 +40,9 @@ class StripeController extends Controller
                 ],
             ],
 
-            'success_url' => 'http://localhost:3000/payment/success',
+            'success_url' => 'https://teachersmarkettest.dentin.cloud/payment/success',
 
-            'cancel_url' => 'http://localhost:3000/payment/cancel',
+            'cancel_url' => 'https://teachersmarkettest.dentin.cloud/payment/cancel',
         ]);
 
         return response()->json([
