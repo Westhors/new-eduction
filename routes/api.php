@@ -219,3 +219,7 @@ Route::post('course-detail/{id}/upload-file', [CourseDetailController::class, 'u
 
 
 Route::middleware('auth:sanctum')->post('/stripe/checkout', [StripeController::class, 'checkout']);
+Route::post(
+    '/stripe/webhook',
+    [StripeController::class, 'webhook']
+);
