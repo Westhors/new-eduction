@@ -11,7 +11,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CourseDetailController;
 use App\Http\Controllers\CurriculumController;
 use App\Http\Controllers\ExamController;
-use App\Http\Controllers\GoogleAuthController;
+// use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\LibraryController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\StageController;
